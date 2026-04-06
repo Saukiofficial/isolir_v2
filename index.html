@@ -47,10 +47,11 @@
       linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: gridScroll 20s linear infinite;
+    will-change: transform;
   }
   @keyframes gridScroll {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(50px); }
+    0%   { transform: translate3d(0,0,0); }
+    100% { transform: translate3d(0,50px,0); }
   }
 
   /* Floating particles */
@@ -62,12 +63,13 @@
     border-radius: 50%;
     animation: floatUp linear infinite;
     opacity: 0;
+    will-change: transform, opacity;
   }
   @keyframes floatUp {
-    0% { transform: translateY(100vh) scale(0); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 0.5; }
-    100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+    0%   { transform: translate3d(0,100vh,0) scale(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.5; }
+    100% { transform: translate3d(0,-100px,0) scale(1.5); opacity: 0; }
   }
 
   /* ===== MAIN LAYOUT ===== */
@@ -132,6 +134,7 @@
     height: clamp(36px, 5vw, 52px);
     animation: shieldPulse 2s ease-in-out infinite;
     flex-shrink: 0;
+    will-change: transform, filter;
   }
   @keyframes shieldPulse {
     0%,100% { filter: drop-shadow(0 0 8px var(--accent-orange)); transform: scale(1); }
@@ -172,10 +175,11 @@
     width: 70%; height: 20px;
     background: radial-gradient(ellipse, rgba(0,212,255,0.4) 0%, transparent 70%);
     animation: ringPulse 2s ease-in-out infinite;
+    will-change: transform, opacity;
   }
   @keyframes ringPulse {
-    0%,100% { opacity: 0.5; transform: translateX(-50%) scaleX(1); }
-    50% { opacity: 1; transform: translateX(-50%) scaleX(1.2); }
+    0%,100% { opacity: 0.5; transform: translate3d(-50%,0,0) scaleX(1); }
+    50%      { opacity: 1;   transform: translate3d(-50%,0,0) scaleX(1.2); }
   }
 
   .oops-message {
@@ -223,13 +227,14 @@
     font-size: clamp(16px, 2.5vw, 22px);
     font-weight: 900;
     color: var(--accent-orange);
-    text-shadow: 0 0 20px rgba(255,107,0,0.6);
+    text-shadow: 0 0 20px rgba(255,107,0,0.7);
     line-height: 1.2;
     animation: textGlow 2s ease-in-out infinite;
+    will-change: opacity;
   }
   @keyframes textGlow {
-    0%,100% { text-shadow: 0 0 15px rgba(255,107,0,0.5); }
-    50% { text-shadow: 0 0 30px rgba(255,107,0,0.9), 0 0 60px rgba(255,107,0,0.3); }
+    0%,100% { opacity: 0.85; }
+    50%      { opacity: 1; }
   }
 
   .detail-list {
@@ -271,19 +276,20 @@
     cursor: pointer;
     text-transform: uppercase;
     overflow: hidden;
-    transition: all 0.3s;
+    transition: filter 0.3s, transform 0.3s;
     animation: gradientShift 3s ease infinite, buttonFloat 2s ease-in-out infinite;
     box-shadow: 0 4px 30px rgba(0,212,255,0.4), 0 0 60px rgba(168,85,247,0.2);
     width: 100%;
     text-decoration: none;
+    will-change: transform, background-position;
   }
   @keyframes gradientShift {
     0%,100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
   }
   @keyframes buttonFloat {
-    0%,100% { transform: translateY(0); box-shadow: 0 4px 30px rgba(0,212,255,0.4); }
-    50% { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(0,212,255,0.6); }
+    0%,100% { transform: translate3d(0,0,0); box-shadow: 0 4px 30px rgba(0,212,255,0.4); }
+    50%      { transform: translate3d(0,-3px,0); box-shadow: 0 8px 40px rgba(0,212,255,0.6); }
   }
 
   .btn-pay::before {
@@ -294,9 +300,9 @@
   }
 
   .btn-pay:hover {
-    animation: gradientShift 3s ease infinite;
     filter: brightness(1.15);
-    transform: translateY(-4px) scale(1.02);
+    transform: translate3d(0,-4px,0) scale(1.02);
+    animation: gradientShift 3s ease infinite;
   }
 
   .btn-pay svg { width: 20px; height: 20px; flex-shrink: 0; }
@@ -355,15 +361,17 @@
   /* ===== SCANNING LINE ===== */
   .scan-line {
     position: fixed; left: 0; right: 0;
+    top: 0;
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
     animation: scanDown 6s linear infinite;
     opacity: 0.3;
     z-index: 0;
+    will-change: transform;
   }
   @keyframes scanDown {
-    0% { top: -2px; }
-    100% { top: 100%; }
+    0%   { transform: translateY(-2px); }
+    100% { transform: translateY(100vh); }
   }
 
   /* ===== MOBILE (≤600px) ===== */
@@ -429,7 +437,7 @@
     border: 1px solid var(--border-glow);
     border-radius: 24px;
     padding: 24px;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(8px);
     box-shadow:
       0 0 40px rgba(0,212,255,0.1),
       0 0 80px rgba(168,85,247,0.08),
@@ -451,7 +459,7 @@
     border: 1px solid var(--border-glow);
     border-radius: 24px;
     padding: 24px 20px;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(8px);
     box-shadow:
       0 0 40px rgba(0,212,255,0.08),
       0 0 60px rgba(168,85,247,0.06),
@@ -649,11 +657,11 @@
   }
   .status-waiting { background: rgba(255,107,0,0.15); color: #ff6b00; border: 1px solid rgba(255,107,0,0.4); }
   .status-active  { background: rgba(0,212,255,0.12); color: var(--accent-blue); border: 1px solid rgba(0,212,255,0.4);
-    animation: statusPulse 1.5s ease-in-out infinite; }
+    animation: statusPulse 1.5s ease-in-out infinite; will-change: opacity; }
   .status-done    { background: rgba(0,255,136,0.12); color: #00ff88; border: 1px solid rgba(0,255,136,0.4); }
   @keyframes statusPulse {
-    0%,100% { box-shadow: 0 0 0 rgba(0,212,255,0); }
-    50% { box-shadow: 0 0 12px rgba(0,212,255,0.4); }
+    0%,100% { opacity: 0.7; }
+    50%      { opacity: 1; }
   }
 
 
@@ -831,6 +839,25 @@
     .step-label { font-size: 11px !important; }
     .countdown-text { font-size: 10px; }
   }
+
+  /* ── Kurangi animasi berat di perangkat low-end / mobile ── */
+  @media (max-width: 600px) {
+    .grid-lines { animation: none; }
+    .scan-line { display: none; }
+    .particles { display: none; }
+    .wifi-rings { display: none; }
+    .platform-ring { animation: none; }
+  }
+
+  /* ── Hormati preferensi reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .grid-lines, .scan-line, .particles { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -852,7 +879,7 @@
   <!-- HEADER -->
   <div class="header">
     <div class="logo">
-      <img src="img/logo.png" alt="Wifi Kita" class="logo-img">
+      <img src="img/logo.webp" alt="Wifi Kita" class="logo-img">
     </div>
 
     <div class="title-badge">
@@ -914,7 +941,7 @@
           <ellipse cx="160" cy="306" rx="115" ry="12" fill="rgba(0,212,255,0.08)"/>
 
           <!-- ===== ROUTER IMAGE ===== -->
-          <image href="img/router.png" x="-10" y="40" width="340" height="260"
+          <image href="img/router.webp" x="-10" y="40" width="340" height="260"
             preserveAspectRatio="xMidYMid meet"
             style="filter: drop-shadow(0 0 14px rgba(0,212,255,0.55)) drop-shadow(0 0 6px rgba(168,85,247,0.4));"/>
 
@@ -1086,7 +1113,7 @@
 <script>
   // ===== PARTICLES =====
   const container = document.getElementById('particles');
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 15; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     p.style.cssText = `
@@ -1217,218 +1244,157 @@
     activateStep(currentStep);
   }, 2500);
 
-  // ===== CANVAS ICON ANIMATORS =====
-  // Canvas 1: Person paying (coin flying to wallet)
-  (function() {
-    const c = document.getElementById('canvas1');
-    const ctx = c.getContext('2d');
-    let t = 0;
-    function draw() {
-      ctx.clearRect(0,0,56,56);
-      // Person (left)
-      ctx.save();
-      ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 1.8;
-      ctx.fillStyle = '#00d4ff';
-      ctx.beginPath(); ctx.arc(11,13,5,0,Math.PI*2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(11,18); ctx.lineTo(11,32); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(11,22); ctx.lineTo(4,29); ctx.stroke();
-      const armY = 22 + Math.sin(t*0.08)*3;
-      ctx.beginPath(); ctx.moveTo(11,22); ctx.lineTo(19,armY); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(11,32); ctx.lineTo(6,42); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(11,32); ctx.lineTo(16,42); ctx.stroke();
-      ctx.restore();
+  // ===== CANVAS ICON ANIMATORS (single RAF loop for all 4) =====
+  const c1 = document.getElementById('canvas1'), ctx1 = c1.getContext('2d');
+  const c2 = document.getElementById('canvas2'), ctx2 = c2.getContext('2d');
+  const c3 = document.getElementById('canvas3'), ctx3 = c3.getContext('2d');
+  const c4 = document.getElementById('canvas4'), ctx4 = c4.getContext('2d');
+  let t = 0;
 
-      // Coin flying
-      const cx = 22 + ((t*1.0)%32);
-      const cy = 27 + Math.sin(t*0.12)*7;
-      const coinAlpha = cx > 46 ? Math.max(0, 1-(cx-46)/6) : 1;
-      ctx.save();
-      ctx.globalAlpha = coinAlpha;
-      ctx.fillStyle = '#ffcc00';
-      ctx.shadowColor = '#ffcc00'; ctx.shadowBlur = 6;
-      ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 5px sans-serif';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('$', cx, cy);
-      ctx.restore();
+  function drawAll() {
+    // --- Canvas 1: Person paying (coin flying to wallet) ---
+    ctx1.clearRect(0,0,56,56);
+    ctx1.save();
+    ctx1.strokeStyle = '#00d4ff'; ctx1.lineWidth = 1.8;
+    ctx1.beginPath(); ctx1.arc(11,13,5,0,Math.PI*2); ctx1.stroke();
+    ctx1.beginPath(); ctx1.moveTo(11,18); ctx1.lineTo(11,32); ctx1.stroke();
+    ctx1.beginPath(); ctx1.moveTo(11,22); ctx1.lineTo(4,29); ctx1.stroke();
+    const armY = 22 + Math.sin(t*0.08)*3;
+    ctx1.beginPath(); ctx1.moveTo(11,22); ctx1.lineTo(19,armY); ctx1.stroke();
+    ctx1.beginPath(); ctx1.moveTo(11,32); ctx1.lineTo(6,42); ctx1.stroke();
+    ctx1.beginPath(); ctx1.moveTo(11,32); ctx1.lineTo(16,42); ctx1.stroke();
+    ctx1.restore();
+    const cx = 22 + ((t*1.0)%32);
+    const cy = 27 + Math.sin(t*0.12)*7;
+    const coinAlpha = cx > 46 ? Math.max(0, 1-(cx-46)/6) : 1;
+    ctx1.save();
+    ctx1.globalAlpha = coinAlpha;
+    ctx1.fillStyle = '#ffcc00';
+    ctx1.beginPath(); ctx1.arc(cx, cy, 4, 0, Math.PI*2); ctx1.fill();
+    ctx1.fillStyle = '#fff';
+    ctx1.font = 'bold 5px sans-serif';
+    ctx1.textAlign = 'center'; ctx1.textBaseline = 'middle';
+    ctx1.fillText('$', cx, cy);
+    ctx1.restore();
+    ctx1.save();
+    ctx1.strokeStyle = '#a855f7'; ctx1.fillStyle = 'rgba(168,85,247,0.2)'; ctx1.lineWidth = 1.8;
+    ctx1.beginPath(); ctx1.roundRect(42,19,12,16,2); ctx1.fill(); ctx1.stroke();
+    ctx1.fillStyle = '#a855f7';
+    ctx1.beginPath(); ctx1.arc(48,27,2.5,0,Math.PI*2); ctx1.fill();
+    ctx1.restore();
 
-      // Wallet (right)
-      ctx.save();
-      ctx.strokeStyle = '#a855f7'; ctx.fillStyle = 'rgba(168,85,247,0.2)'; ctx.lineWidth = 1.8;
-      ctx.beginPath(); ctx.roundRect(42,19,12,16,2); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = '#a855f7';
-      ctx.beginPath(); ctx.arc(48,27,2.5,0,Math.PI*2); ctx.fill();
-      ctx.restore();
-
-      t++;
-      requestAnimationFrame(draw);
+    // --- Canvas 2: Chat / phone confirmation ---
+    ctx2.clearRect(0,0,56,56);
+    ctx2.save();
+    ctx2.strokeStyle = '#00d4ff'; ctx2.lineWidth = 2;
+    ctx2.fillStyle = 'rgba(0,212,255,0.1)';
+    ctx2.beginPath(); ctx2.roundRect(5,12,15,28,3); ctx2.fill(); ctx2.stroke();
+    ctx2.fillStyle = '#00d4ff';
+    ctx2.beginPath(); ctx2.arc(12,35,1.5,0,Math.PI*2); ctx2.fill();
+    ctx2.strokeStyle = 'rgba(0,212,255,0.4)'; ctx2.lineWidth=1;
+    ctx2.beginPath(); ctx2.moveTo(7,18); ctx2.lineTo(17,18); ctx2.stroke();
+    ctx2.beginPath(); ctx2.moveTo(7,22); ctx2.lineTo(17,22); ctx2.stroke();
+    ctx2.restore();
+    for(let i=0;i<3;i++){
+      const progress = ((t*0.04 + i*0.33) % 1);
+      const alpha = 1 - progress;
+      const r = 8 + progress*12;
+      ctx2.save();
+      ctx2.strokeStyle = `rgba(0,212,255,${alpha * 0.7})`;
+      ctx2.lineWidth = 1.5;
+      ctx2.beginPath();
+      ctx2.arc(20, 26, r, -Math.PI*0.7, Math.PI*0.7);
+      ctx2.stroke();
+      ctx2.restore();
     }
-    draw();
-  })();
-
-  // Canvas 2: Chat bubble / phone confirmation
-  (function() {
-    const c = document.getElementById('canvas2');
-    const ctx = c.getContext('2d');
-    let t = 0;
-    function draw() {
-      ctx.clearRect(0,0,56,56);
-      const ping = Math.floor(t/30) % 3;
-
-      // Phone left
-      ctx.save();
-      ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 2;
-      ctx.fillStyle = 'rgba(0,212,255,0.1)';
-      ctx.beginPath(); ctx.roundRect(5,12,15,28,3); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = '#00d4ff';
-      ctx.beginPath(); ctx.arc(12,35,1.5,0,Math.PI*2); ctx.fill();
-      ctx.strokeStyle = 'rgba(0,212,255,0.4)'; ctx.lineWidth=1;
-      ctx.beginPath(); ctx.moveTo(7,18); ctx.lineTo(17,18); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(7,22); ctx.lineTo(17,22); ctx.stroke();
-      ctx.restore();
-
-      // Signal waves from phone
-      for(let i=0;i<3;i++){
-        const progress = ((t*0.04 + i*0.33) % 1);
-        const alpha = 1 - progress;
-        const r = 8 + progress*12;
-        ctx.save();
-        ctx.strokeStyle = `rgba(0,212,255,${alpha * 0.7})`;
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(20, 26, r, -Math.PI*0.7, Math.PI*0.7);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // Admin icon (right) - person with checkmark
-      ctx.save();
-      ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2;
-      // head
-      ctx.beginPath(); ctx.arc(44,15,5,0,Math.PI*2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(44,20); ctx.lineTo(44,34); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(44,25); ctx.lineTo(38,31); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(44,25); ctx.lineTo(50,31); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(44,34); ctx.lineTo(39,44); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(44,34); ctx.lineTo(49,44); ctx.stroke();
-
-      if(ping >= 1){
-        ctx.fillStyle = '#00ff88'; ctx.shadowColor='#00ff88'; ctx.shadowBlur=8;
-        ctx.beginPath(); ctx.arc(51,10,5,0,Math.PI*2); ctx.fill();
-        ctx.strokeStyle='#fff'; ctx.lineWidth=1.5; ctx.shadowBlur=0;
-        ctx.beginPath(); ctx.moveTo(48,10); ctx.lineTo(50,12); ctx.lineTo(54,7); ctx.stroke();
-      }
-      ctx.restore();
-
-      t++;
-      requestAnimationFrame(draw);
+    ctx2.save();
+    ctx2.strokeStyle = '#a855f7'; ctx2.lineWidth = 2;
+    ctx2.beginPath(); ctx2.arc(44,15,5,0,Math.PI*2); ctx2.stroke();
+    ctx2.beginPath(); ctx2.moveTo(44,20); ctx2.lineTo(44,34); ctx2.stroke();
+    ctx2.beginPath(); ctx2.moveTo(44,25); ctx2.lineTo(38,31); ctx2.stroke();
+    ctx2.beginPath(); ctx2.moveTo(44,25); ctx2.lineTo(50,31); ctx2.stroke();
+    ctx2.beginPath(); ctx2.moveTo(44,34); ctx2.lineTo(39,44); ctx2.stroke();
+    ctx2.beginPath(); ctx2.moveTo(44,34); ctx2.lineTo(49,44); ctx2.stroke();
+    const ping = Math.floor(t/30) % 3;
+    if(ping >= 1){
+      ctx2.fillStyle = '#00ff88';
+      ctx2.beginPath(); ctx2.arc(51,10,5,0,Math.PI*2); ctx2.fill();
+      ctx2.strokeStyle='#fff'; ctx2.lineWidth=1.5;
+      ctx2.beginPath(); ctx2.moveTo(48,10); ctx2.lineTo(50,12); ctx2.lineTo(54,7); ctx2.stroke();
     }
-    draw();
-  })();
+    ctx2.restore();
 
-  // Canvas 3: Operator toggling switch / server activation
-  (function() {
-    const c = document.getElementById('canvas3');
-    const ctx = c.getContext('2d');
-    let t = 0;
-    function draw() {
-      ctx.clearRect(0,0,56,56);
-
-      // Server rack
-      ctx.save();
-      ctx.strokeStyle='#a855f7'; ctx.fillStyle='rgba(168,85,247,0.1)'; ctx.lineWidth=2;
-      ctx.beginPath(); ctx.roundRect(15,8,26,40,3); ctx.fill(); ctx.stroke();
-      for(let i=0;i<4;i++){
-        const y = 13+i*9;
-        const lit = i <= Math.floor((t/40)%4);
-        ctx.fillStyle = lit ? '#00ff88':'rgba(255,255,255,0.1)';
-        ctx.shadowColor = lit ? '#00ff88':'transparent'; ctx.shadowBlur = lit?6:0;
-        ctx.beginPath(); ctx.arc(21,y+3,2.5,0,Math.PI*2); ctx.fill();
-        ctx.shadowBlur=0;
-        ctx.fillStyle='rgba(255,255,255,0.08)';
-        ctx.beginPath(); ctx.roundRect(26,y,11,6,2); ctx.fill();
-      }
-      ctx.restore();
-
-      // WiFi signal emanating from server top
-      for(let i=0;i<3;i++){
-        const progress = ((t*0.03 + i*0.33) % 1);
-        const alpha = (1-progress)*0.8;
-        const r = 3 + progress*16;
-        ctx.save();
-        ctx.strokeStyle=`rgba(0,212,255,${alpha})`;
-        ctx.lineWidth=1.5;
-        ctx.beginPath(); ctx.arc(28,7,r,-Math.PI,0); ctx.stroke();
-        ctx.restore();
-      }
-
-      t++;
-      requestAnimationFrame(draw);
+    // --- Canvas 3: Server rack ---
+    ctx3.clearRect(0,0,56,56);
+    ctx3.save();
+    ctx3.strokeStyle='#a855f7'; ctx3.fillStyle='rgba(168,85,247,0.1)'; ctx3.lineWidth=2;
+    ctx3.beginPath(); ctx3.roundRect(15,8,26,40,3); ctx3.fill(); ctx3.stroke();
+    for(let i=0;i<4;i++){
+      const y = 13+i*9;
+      const lit = i <= Math.floor((t/40)%4);
+      ctx3.fillStyle = lit ? '#00ff88':'rgba(255,255,255,0.1)';
+      ctx3.beginPath(); ctx3.arc(21,y+3,2.5,0,Math.PI*2); ctx3.fill();
+      ctx3.fillStyle='rgba(255,255,255,0.08)';
+      ctx3.beginPath(); ctx3.roundRect(26,y,11,6,2); ctx3.fill();
     }
-    draw();
-  })();
-
-  // Canvas 4: WiFi signal full + checkmark (internet normal)
-  (function() {
-    const c = document.getElementById('canvas4');
-    const ctx = c.getContext('2d');
-    let t = 0;
-    function draw() {
-      ctx.clearRect(0,0,56,56);
-      const pulse = 0.6 + Math.sin(t*0.08)*0.4;
-
-      // WiFi arcs - full signal
-      const arcs = [
-        {r:8, color:'#00ff88'},
-        {r:16, color:'#00d4ff'},
-        {r:23, color:'#a855f7'},
-      ];
-      arcs.forEach(({r,color},i) => {
-        const p = ((t*0.04 + i*0.25)%1);
-        const a = Math.sin(p*Math.PI);
-        ctx.save();
-        ctx.strokeStyle = color;
-        ctx.globalAlpha = a * pulse;
-        ctx.lineWidth = 2.5;
-        ctx.shadowColor = color; ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.arc(28,36,r,-Math.PI*0.75,Math.PI*-0.25);
-        ctx.stroke();
-        ctx.restore();
-      });
-
-      // Center dot
-      ctx.save();
-      ctx.fillStyle='#00ff88'; ctx.shadowColor='#00ff88'; ctx.shadowBlur=10*pulse;
-      ctx.beginPath(); ctx.arc(28,36,3,0,Math.PI*2); ctx.fill();
-      ctx.restore();
-
-      // Big checkmark
-      ctx.save();
-      const prog = Math.min(1,(t%120)/50);
-      ctx.strokeStyle='#00ff88'; ctx.lineWidth=3;
-      ctx.shadowColor='#00ff88'; ctx.shadowBlur=15;
-      ctx.lineCap='round'; ctx.lineJoin='round';
-      ctx.beginPath();
-      if(prog>0){
-        const p1 = Math.min(prog/0.4, 1);
-        const startX=10,startY=16,midX=22,midY=26;
-        ctx.moveTo(startX,startY);
-        ctx.lineTo(startX+(midX-startX)*p1, startY+(midY-startY)*p1);
-        if(prog>0.4){
-          const p2 = (prog-0.4)/0.6;
-          ctx.lineTo(midX+(42-midX)*p2, midY+(8-midY)*p2);
-        }
-      }
-      ctx.stroke();
-      ctx.restore();
-
-      t++;
-      requestAnimationFrame(draw);
+    ctx3.restore();
+    for(let i=0;i<3;i++){
+      const progress = ((t*0.03 + i*0.33) % 1);
+      const alpha = (1-progress)*0.8;
+      const r = 3 + progress*16;
+      ctx3.save();
+      ctx3.strokeStyle=`rgba(0,212,255,${alpha})`;
+      ctx3.lineWidth=1.5;
+      ctx3.beginPath(); ctx3.arc(28,7,r,-Math.PI,0); ctx3.stroke();
+      ctx3.restore();
     }
-    draw();
-  })();
+
+    // --- Canvas 4: WiFi + checkmark ---
+    ctx4.clearRect(0,0,56,56);
+    const pulse = 0.6 + Math.sin(t*0.08)*0.4;
+    const arcs = [
+      {r:8, color:'#00ff88'},
+      {r:16, color:'#00d4ff'},
+      {r:23, color:'#a855f7'},
+    ];
+    arcs.forEach(({r,color},i) => {
+      const p = ((t*0.04 + i*0.25)%1);
+      const a = Math.sin(p*Math.PI);
+      ctx4.save();
+      ctx4.strokeStyle = color;
+      ctx4.globalAlpha = a * pulse;
+      ctx4.lineWidth = 2.5;
+      ctx4.beginPath();
+      ctx4.arc(28,36,r,-Math.PI*0.75,Math.PI*-0.25);
+      ctx4.stroke();
+      ctx4.restore();
+    });
+    ctx4.save();
+    ctx4.fillStyle='#00ff88';
+    ctx4.beginPath(); ctx4.arc(28,36,3,0,Math.PI*2); ctx4.fill();
+    ctx4.restore();
+    ctx4.save();
+    const prog = Math.min(1,(t%120)/50);
+    ctx4.strokeStyle='#00ff88'; ctx4.lineWidth=3;
+    ctx4.lineCap='round'; ctx4.lineJoin='round';
+    ctx4.beginPath();
+    if(prog>0){
+      const p1 = Math.min(prog/0.4, 1);
+      const startX=10,startY=16,midX=22,midY=26;
+      ctx4.moveTo(startX,startY);
+      ctx4.lineTo(startX+(midX-startX)*p1, startY+(midY-startY)*p1);
+      if(prog>0.4){
+        const p2 = (prog-0.4)/0.6;
+        ctx4.lineTo(midX+(42-midX)*p2, midY+(8-midY)*p2);
+      }
+    }
+    ctx4.stroke();
+    ctx4.restore();
+
+    t++;
+    requestAnimationFrame(drawAll);
+  }
+  drawAll();
 
   // ===== GLITCH EFFECT ON TITLE =====
   const title = document.querySelector('.main-title');
